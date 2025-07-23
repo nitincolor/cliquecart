@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Installing and Deploying CozyCommerce
 
-## Getting Started
+## Install and Deploy CozyCommerce
 
-First, run the development server:
+In this part of the documentation we will show you how to install CozyCommerce.
+
+<Callout type="info">
+  Before moving forward, make sure you have Node.js installed on your machine.
+  Otherwise the installation commands will not work.
+</Callout>
+
+**1.** Download template and extract it. Then CD into that directory and run this command to install the dependencies:
 
 ```bash
-npm run dev
+npm install
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<!-- > Some included packages causes peer-deps issue with React 19 while installing.
+> With npm the `--legacy-peer-deps` flag is a workaround for that at the moment. -->
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**2.** After completing the installation run this command to start the developement server:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash copy
+npm run dev
+```
 
-## Learn More
+or
 
-To learn more about Next.js, take a look at the following resources:
+```bash copy
+yarn dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Next Steps
 
-## Deploy on Vercel
+Once the installation is done,  
+Follow these steps to complete the installation.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. [Database Integration - PostgreSQL on Vercel ](https://CozyCommerce.com//docs/database/postgresql)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<Callout type="info">
+  **Note:** you can use any PostgreSQL you want. Just save the database url in
+  the env using this name:
+</Callout>
+
+```
+DATABASE_URL=YOUR_DB_CONNECT_URL
+```
+
+2. [Authentication](https://CozyCommerce.com/docs/authentication)
+
+3.[Stripe Integration](https://CozyCommerce.com/docs/stripe)
+
+4.[Algolia Integration](https://CozyCommerce.com/docs/algolia)
+
+---
+
+## Deploying to server
+
+After the installation and customization are done you have to deploy the template.
+Here are the steps you need to follow to deploy the template:
+
+Build the template locally and then deploy it to the server.
+Build the template using the following command, When you run this command you’ll get a build folder. Now you can upload this folder to your server and your site will be live.
+
+```bash copy
+npm run build
+```
+
+or
+
+```bash copy
+yarn build
+```
+
+## Update Logs
+
+Version 1.2.2 - Improvements - [July, 2025]
+
+- Fixed linking issues throughout the site
+- Updated Add to Cart functionality to open the cart sidebar
+
+Version 1.2.1 - Features - [Feb 13, 2025]
+
+- Upgraded to Next15
+- Upgraded to Tailwind v4
+- Form validation using React Hook Form
+- Fully functional checkout page(with input validation and state changes)
+- Refactored products filtering; querying from Sanity.
+- Managing user addresses(Shipping and Billing) on database.
+- Improve re-usability, code refactoring etc.
+
+Version 1.0.1 - Patches - [Feb 02, 2025]
+
+- Fix countdown timer
+- Showing indicator if product has been added to wishlist
+- Redesign _Empty Cart_ page
