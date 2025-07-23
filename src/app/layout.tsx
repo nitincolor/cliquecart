@@ -1,14 +1,14 @@
 import "./css/style.css";
 import { Metadata } from "next";
 import { getSeoSettings, getSiteName } from "@/get-api-data/seo-setting";
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seoSettings = await getSeoSettings();
   const site_name = await getSiteName();
   return {
-    title: `CozyCommerce Store`,
-    description: "This is a site of CozyCommerce",
+    title: `Cliquecart Store`,
+    description: "This is a site for Cliquecart Store",
     keywords: seoSettings?.metaKeywords || "e-commerce, online store",
     openGraph: {
       images: seoSettings?.metaImage ? [seoSettings.metaImage] : [],

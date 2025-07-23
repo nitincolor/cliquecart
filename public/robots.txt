@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://demo.cozycommerce.dev
+Host: https://demo.cliquecart.com
 
 # Sitemaps
-Sitemap: https://demo.cozycommerce.dev/sitemap.xml
+Sitemap: https://demo.cliquecart.com/sitemap.xml
