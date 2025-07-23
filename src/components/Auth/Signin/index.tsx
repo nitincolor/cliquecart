@@ -44,7 +44,7 @@ const Signin = () => {
   const handleQuickLogin = (role: 'user' | 'admin') => {
     const credentials = {
       user: { email: 'user@gmail.com', password: 'Cozy1234' },
-      admin: { email: 'admin@gmail.com', password: 'Cozy1234' }
+      admin: { email: 'nitin6353@gmail.com', password: 'Nitin@1234' }
     };
 
     setValue('email', credentials[role].email);
