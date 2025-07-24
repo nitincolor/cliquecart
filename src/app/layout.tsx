@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const seoSettings = await getSeoSettings();
   const site_name = await getSiteName();
 
-  // COMMENT
+  // COMMEN
   return {
     title: `Cliquecart Store`,
     description: "This is a site for Cliquecart Store",
