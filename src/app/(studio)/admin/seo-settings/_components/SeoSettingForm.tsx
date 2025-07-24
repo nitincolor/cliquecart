@@ -42,9 +42,9 @@ export default function SeoSettingForm({
             favicon: {
                 image: seoSettingItem?.favicon || "",
             },
-            siteName: seoSettingItem?.siteName || "Cozy-commerce",
+            siteName: seoSettingItem?.siteName || "Clique-Cart",
             siteTitle: seoSettingItem?.siteTitle || "Home Page",
-            metadescription: seoSettingItem?.metadescription || "Cozy-commerce is a next.js e-commerce boilerplate built with nextjs, typescript, tailwindcss, and prisma.",
+            metadescription: seoSettingItem?.metadescription || "Clique-Cart is a next.js e-commerce boilerplate built with nextjs, typescript, tailwindcss, and prisma.",
             metaImage: {
                 image: seoSettingItem?.metaImage || "",
             },

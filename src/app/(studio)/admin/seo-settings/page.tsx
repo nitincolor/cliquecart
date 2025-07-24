@@ -2,7 +2,7 @@ import { getSeoSettings } from "@/get-api-data/seo-setting";
 import SeoSettingForm from "./_components/SeoSettingForm";
 
 export const metadata = {
-    title: "SEO Settings | Admin Dashboard Cozy-commerce",
+    title: "SEO Settings | Admin Dashboard Clique-Cart",
 }
 
 export default async function SeoSettingsPage() {
