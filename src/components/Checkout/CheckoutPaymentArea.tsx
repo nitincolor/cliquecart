@@ -19,11 +19,29 @@ import { useShoppingCart } from "use-shopping-cart";
 
 const CheckoutPaymentArea = ({ amount }: { amount: number }) => {
   const { handleSubmit } = useCheckoutForm();
+
   const { data: session } = useSession();
+
+  const stripe = useStripe();
+  const elements = useElements();
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const { cartDetails } = useShoppingCart();
+
+  // Create a PaymentIntent as soon as the page loads
+  useEffect(() => {
+    fetch("/api/create-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
+    })
+      .then((res) => res.json())
+      .then((data) => setClientSecret(data.clientSecret));
+  }, [amount]);
 
   // Handle checkout
   const handleCheckout = async (data: CheckoutInput) => {
@@ -92,12 +110,75 @@ const CheckoutPaymentArea = ({ amount }: { amount: number }) => {
       }
     };
 
-    // Only COD supported now
-    const success = await createOrder("pending");
+    if (data.paymentMethod === "cod") {
+      const success = await createOrder("pending");
+      setLoading(false); // Stop loading regardless of success or failure
+      if (!success) return; // Exit if order creation failed
+      return;
+    }
+
+    if (!stripe || !elements) return;
+    // Continue with Stripe Payment if NOT COD
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      setErrorMessage(submitError.message);
+      setLoading(false);
+      return;
+    }
+
+    const siteUrl = process.env.SITE_URL || "http://www.localhost:3000";
+    try {
+      const { paymentIntent, error } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${siteUrl}/success?amount=${amount}`, // Empty to prevent Stripe redirect
+        },
+        redirect: "if_required",
+      });
+
+      if (error) {
+        console.log(error, "error in payment");
+        setErrorMessage(error.message);
+        setLoading(false);
+        return;
+      }
+
+      if (paymentIntent?.status === "succeeded") {
+        const orderSuccess = await createOrder("paid");
+        if (!orderSuccess) {
+          toast.error(
+            "Payment was successful, but order creation failed. Please contact support."
+          );
+          console.error(
+            "Payment succeeded but order failed. PaymentIntent:",
+            paymentIntent
+          );
+        }
+      }
+    } catch (err) {
+      console.log(err, "err in payment");
+      setErrorMessage("Order processing failed. Please try again.");
+    }
+
     setLoading(false);
-    if (!success) return;
-    return;
   };
+
+  // Check if Stripe is loaded
+  if (!clientSecret || !stripe || !elements) {
+    return (
+      <div className="mt-48 text-center">
+        <div className="flex items-center justify-center h-80">
+          <div className="relative flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-blue border-t-transparent rounded-full animate-spin mb-3.5 text-center"></div>
+            <p className="mt-4 text-lg font-semibold text-blue">
+              Processing to checkout...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

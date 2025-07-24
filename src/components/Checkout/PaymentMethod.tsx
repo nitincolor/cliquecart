@@ -15,29 +15,30 @@ const PaymentMethod = ({ amount }: { amount: number }) => {
 
       <div className="p-6">
         <div className="flex flex-col gap-3">
-          {/* Stripe (bank) payment option removed */}
+          {amount > 0 && (
+            <Controller
+              name="paymentMethod"
+              control={control}
+              render={({ field }) => (
+                <RadioInput
+                  {...field}
+                  value="bank"
+                  defaultChecked
+                  label={<PaymentMethodCard method="bank" />}
+                />
+              )}
+            />
+          )}
 
           <Controller
             name="paymentMethod"
             control={control}
             render={({ field }) => (
-              <>
-                <RadioInput
-                  {...field}
-                  value="cod"
-                  label={<PaymentMethodCard method="cod" />}
-                />
-                <RadioInput
-                  {...field}
-                  value="bank"
-                  label={<PaymentMethodCard method="bank" />}
-                />
-                <RadioInput
-                  {...field}
-                  value="paypal"
-                  label={<PaymentMethodCard method="paypal" />}
-                />
-              </>
+              <RadioInput
+                {...field}
+                value="cod"
+                label={<PaymentMethodCard method="cod" />}
+              />
             )}
           />
 
@@ -62,22 +63,15 @@ const PaymentMethod = ({ amount }: { amount: number }) => {
           </p>
         )}
 
+        {paymentMethod === "bank" && amount > 0 && (
+          <div className="mt-5">
+            <PaymentElement />
+          </div>
+        )}
         {paymentMethod === "cod" && (
           <p className="mt-5 text-green">
             You have selected Cash on Delivery. Your order will be processed and
             payment will be collected upon delivery.
-          </p>
-        )}
-        {paymentMethod === "bank" && (
-          <p className="mt-5 text-orange">
-            You have selected Bank Transfer. Your order will be dispatched once
-            we receive payment information.
-          </p>
-        )}
-        {paymentMethod === "paypal" && (
-          <p className="mt-5 text-orange">
-            You have selected Paypal. Your order will be dispatched once we
-            receive payment information.
           </p>
         )}
       </div>
@@ -88,7 +82,7 @@ const PaymentMethod = ({ amount }: { amount: number }) => {
 export default PaymentMethod;
 
 type CardProps = {
-  method: "bank" | "cod" | "paypal";
+  method: "bank" | "cod";
 };
 // type CardProps = {
 //   method: "bank" | "cod" | "paypal";
@@ -97,11 +91,11 @@ type CardProps = {
 function PaymentMethodCard({ method }: CardProps) {
   const data = {
     bank: {
-      name: "Bank Transfer",
+      name: "Stripe",
       image: {
-        src: "/images/checkout/cash.svg",
-        width: 21,
-        height: 21,
+        src: "/images/checkout/stripe.svg",
+        width: 75,
+        height: 20,
       },
     },
     cod: {
@@ -112,14 +106,14 @@ function PaymentMethodCard({ method }: CardProps) {
         height: 21,
       },
     },
-    paypal: {
-      name: "Paypal",
-      image: {
-        src: "/images/checkout/paypal.svg",
-        width: 75,
-        height: 20,
-      },
-    },
+    // paypal: {
+    //   name: "Paypal",
+    //   image: {
+    //     src: "/images/checkout/paypal.svg",
+    //     width: 75,
+    //     height: 20,
+    //   },
+    // },
   };
 
   return (

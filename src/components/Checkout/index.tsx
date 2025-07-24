@@ -11,10 +11,12 @@ import { EmptyCartIcon } from "@/assets/icons";
 import CheckoutPaymentArea from "./CheckoutPaymentArea";
 import CheckoutAreaWithoutStripe from "./CheckoutAreaWithoutStripe";
 
-// Stripe is not configured, so we remove all Stripe-related imports and logic.
-// const stripePromise = loadStripe(
-//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-// );
+if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
+  throw new Error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined");
+}
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 
 export default function CheckoutMain() {
   const session = useSession();
@@ -86,18 +88,27 @@ export default function CheckoutMain() {
   }
 
   return amount > 0 ? (
-    <CheckoutFormProvider
-      value={{
-        register,
-        watch,
-        control,
-        setValue,
-        errors: formState.errors,
-        handleSubmit,
+    <Elements
+      stripe={stripePromise}
+      options={{
+        mode: "payment",
+        amount: convertToSubcurrency(amount),
+        currency: "usd",
       }}
     >
-      <CheckoutPaymentArea amount={amount} />
-    </CheckoutFormProvider>
+      <CheckoutFormProvider
+        value={{
+          register,
+          watch,
+          control,
+          setValue,
+          errors: formState.errors,
+          handleSubmit,
+        }}
+      >
+        <CheckoutPaymentArea amount={amount} />
+      </CheckoutFormProvider>
+    </Elements>
   ) : (
     <CheckoutFormProvider
       value={{

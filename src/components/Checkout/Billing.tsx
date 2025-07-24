@@ -90,9 +90,7 @@ export default function Billing() {
                 Select your country
               </option>
 
-              <option value="india" defaultChecked>
-                India
-              </option>
+              <option value="australia">Australia</option>
               <option value="america">America</option>
               <option value="england">England</option>
             </select>
