@@ -68,20 +68,34 @@ export const structuredAlgoliaHtmlData = async ({
 
 async function addToAlgolia(record: any) {
   try {
+    // Skip Algolia operations during build if environment variables are missing or insufficient permissions
+    if (!appID || !apiKEY || !INDEX) {
+      console.log("Skipping Algolia indexing: missing environment variables");
+      return;
+    }
+    
     await index.saveObject(record, {
       autoGenerateObjectIDIfNotExist: true,
     });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log("error in addToAlgolia", error);
+    // Don't throw the error to prevent build failures
   }
 }
 
 export const updateIndex = async (data: any) => {
   try {
+    // Skip Algolia operations during build if environment variables are missing or insufficient permissions
+    if (!appID || !apiKEY || !INDEX) {
+      console.log("Skipping Algolia update: missing environment variables");
+      return;
+    }
+    
     await index.partialUpdateObject(data);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log("error in updateIndex", error);
+    // Don't throw the error to prevent build failures
   }
 };

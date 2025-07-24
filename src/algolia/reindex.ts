@@ -14,6 +14,12 @@ const index = client.initIndex(INDEX);
 
 export const reindexAllProducts = async () => {
   try {
+    // Skip Algolia operations during build if environment variables are missing or insufficient permissions
+    if (!appID || !apiKEY || !INDEX) {
+      console.log("Skipping Algolia reindexing: missing environment variables");
+      return;
+    }
+
     // Clear the existing index
     console.log("Clearing Algolia index...");
     await index.clearObjects();
