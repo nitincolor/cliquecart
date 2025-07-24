@@ -6,6 +6,8 @@ import { GoogleTagManager } from "@next/third-parties/google";
 export async function generateMetadata(): Promise<Metadata> {
   const seoSettings = await getSeoSettings();
   const site_name = await getSiteName();
+
+  // COMMENT
   return {
     title: `Cliquecart Store`,
     description: "This is a site for Cliquecart Store",
